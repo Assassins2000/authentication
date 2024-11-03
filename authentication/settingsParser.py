@@ -14,7 +14,7 @@ class DataBaseConfig:
         self._host = dbSettings['host']
         self._port = dbSettings['port']
         self._db = dbSettings['port']
-        self._user = dbSettings['user']
+        self._user = dbSettings['username']
         self._password = dbSettings['password']
 
 
@@ -29,16 +29,28 @@ class DataBaseConfig:
             "PORT": self._port 
         }
 
+class BaseSettingsException(Exception):
+    def __init__(self, key, *args) -> None:
+        super().__init__(*args)
+        self.key = key
+
+    def __str__(self):
+        return f"Поле {self.key}. обязательное"
+
 class SettingsParser:
-    _read_data = {}
+    _settings = {}
 
     def __init__(self) -> None:
         print(os.listdir())
         with open('config.yaml') as config:
-           self._read_data = yaml.load(config, Loader=yaml.FullLoader)
+           self._settings = yaml.load(config, Loader=yaml.FullLoader)
 
     def getData(self):
+        secret_key = self._settings.get('secret_key', None)
+        if secret_key is None:
+            raise BaseSettingsException('secret_key');
+
         return {
-            "db": DataBaseConfig(self._read_data["config"]["database"]),
-            "secretKey": self._read_data["config"]["secretKey"]
+            "db": DataBaseConfig(self._read_data.get("database", "localhost")),
+            "secretKey": self._read_data.get("secret_key", null)
         }
