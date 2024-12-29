@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from .serializers import UserSerializer
 from .models import User, UserExistsException
 
-class UserViewSet(viewsets.ViewSet):
+class AccountViewSet(viewsets.ViewSet):
     queryset = User.objects.all()
 
     def get_permissions(self):
