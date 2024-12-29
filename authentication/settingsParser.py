@@ -2,6 +2,8 @@ import yaml
 import os
 import sys
 
+from dataclasses import dataclass 
+
 class DataBaseConfig:
     _host: str = None
     _port: int = None
@@ -13,8 +15,9 @@ class DataBaseConfig:
     def __init__(self, dbSettings):
         self._host = dbSettings['host']
         self._port = dbSettings['port']
-        self._db = dbSettings['port']
         self._user = dbSettings['username']
+        self._db = dbSettings['db']
+        self._user = dbSettings['user']
         self._password = dbSettings['password']
 
 
@@ -22,7 +25,7 @@ class DataBaseConfig:
     def getObjectSettings(self):
         return {
             "ENGINE": self._engine,
-            "NAME": self.db,
+            "NAME": self._db,
             "USER": self._user,
             "PASSWORD": self._password,
             "HOST": self._host,
@@ -37,6 +40,11 @@ class BaseSettingsException(Exception):
     def __str__(self):
         return f"Поле {self.key}. обязательное"
 
+@dataclass
+class Config:
+    db: DataBaseConfig
+    secret_key: str
+
 class SettingsParser:
     _settings = {}
 
@@ -45,12 +53,8 @@ class SettingsParser:
         with open('config.yaml') as config:
            self._settings = yaml.load(config, Loader=yaml.FullLoader)
 
-    def getData(self):
+    def getData(self) -> Config:
         secret_key = self._settings.get('secret_key', None)
         if secret_key is None:
             raise BaseSettingsException('secret_key');
-
-        return {
-            "db": DataBaseConfig(self._read_data.get("database", "localhost")),
-            "secretKey": self._read_data.get("secret_key", null)
-        }
+        return Config(db = DataBaseConfig(self._read_data["database"]), secret_key = self._read_data["secretKey"])
