@@ -15,7 +15,6 @@ class DataBaseConfig:
     def __init__(self, dbSettings):
         self._host = dbSettings['host']
         self._port = dbSettings['port']
-        self._user = dbSettings['username']
         self._db = dbSettings['db']
         self._user = dbSettings['user']
         self._password = dbSettings['password']
@@ -57,4 +56,4 @@ class SettingsParser:
         secret_key = self._settings.get('secret_key', None)
         if secret_key is None:
             raise BaseSettingsException('secret_key');
-        return Config(db = DataBaseConfig(self._read_data["database"]), secret_key = self._read_data["secretKey"])
+        return Config(db = DataBaseConfig(self._settings["database"]), secret_key = self._settings["secret_key"])
