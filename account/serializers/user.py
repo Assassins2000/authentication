@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from users.models import User, UserExistsException 
+from account.models import User, UserExistsException 
 
 class UserSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length = 100)
