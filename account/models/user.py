@@ -9,6 +9,8 @@ class UserExistsException(Exception):
 
 class CustomToken(Token):
     user = models.ForeignKey("User", on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+    
 
 class UserManager(BaseUserManager):
     use_in_migrations = True

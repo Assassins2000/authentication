@@ -1,1 +1,1 @@
-from .user import User, UserExistsException
+from .user import User, CustomToken, UserExistsException

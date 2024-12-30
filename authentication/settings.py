@@ -14,6 +14,8 @@ from pathlib import Path
 
 from .settingsParser import SettingsParser
 
+import datetime
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -49,6 +51,15 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'account.authentication.CustomTokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
 
 ROOT_URLCONF = 'authentication.urls'
 
@@ -121,3 +132,5 @@ STATIC_URL = 'static/'
 AUTH_USER_MODEL = 'account.User'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+TOKEN_EXPIRATION_TIME = datetime.timedelta(days=30)
